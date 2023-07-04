@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">etch-a-sketch</header>
+    <main class="mid">
+        <div class="settings">
+            <button class="button">New</button>
+            <div class="sliderPart">
+                <label for="range">Number of grids</label>
+                <input type="range" name="range" class="range" max="100" min="0" step="25" value="50" oninput="this.nextElementSibling.value = this.value">
+                <output>50</output>
+             </div>
+                <div class="togglePart">
+                    <div>Rainbow Mode</div>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                
+             </div>
+        </div>
+
+        <div class="container"></div>
+    
+        <div class="rightColumn"></div>
+        
+    </main>
+    <footer class="footer">Mindown</footer>
+    
+   
+          
+    
+    <script>
+        const container = document.querySelector(".container");
+        const button = document.querySelector(".button")
+        const slider = document.querySelector(".range")
+
+        let gridPadding = 0;
+
+        ask();
+        
+        function ask(){
+            let howMany = parseInt(prompt("Number of squares per side for the new grid:"));
+
+
+            createGrid(howMany);
+        }
+
+        function createGrid(number) {
+
+            gridPadding = ((375 / number) / 2) 
+            gridPadding = gridPadding.toFixed(2) - 1
+
+            for (let j=0; j< number; j++) {
+                for (let i=0; i< number; i++) {
+                    const grid = document.createElement("div");
+                    grid.className= "grid";
+                    grid.style.border ="0.1px solid gray"; 
+                    grid.style.padding =`${gridPadding}px`
+                    container.appendChild(grid);          
+                }
+            }
+        }
+
+        function removeGrids() {
+            let grids = document.querySelectorAll(".grid");
+            grids.forEach(element => {
+                element.remove();  
+            });
+            
+        }
+
+        button.addEventListener("click",() => {
+            removeGrids();
+            ask();
+        })
+
+        slider.addEventListener("input",function() {
+            removeGrids();
+            createGrid(this.value);
+        })
+        
+    </script>
+</body>
+</html>

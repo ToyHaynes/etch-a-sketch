@@ -13,8 +13,8 @@
             <button class="button">New</button>
             <div class="sliderPart">
                 <label for="range">Number of grids</label>
-                <input type="range" name="range" class="range" max="100" min="0" step="25" value="50" oninput="this.nextElementSibling.value = this.value">
-                <output>50</output>
+                <input type="range" name="range" class="range" max="100" min="1" step="1" value="25" oninput="this.nextElementSibling.value = this.value">
+                <output>25</output>
             </div>
             <div class="togglePart">
                 <div>Rainbow Mode</div>
@@ -30,8 +30,13 @@
                     <span class="slider round"></span>
                 </label>
             </div>
-            
-             </div>
+            <div class="togglePart">
+                <div>Hover/Click</div>
+                <label class="switch">
+                    <input type="checkbox" class="click">
+                    <span class="slider round"></span>
+                </label>
+            </div>
         </div>
 
         <div class="container"></div>
@@ -41,112 +46,114 @@
     </main>
     <footer class="footer">Mindown © 2023</footer>
     
-   
-          
-    
     <script>
         const container = document.querySelector(".container");
-        const button = document.querySelector(".button")
-        const slider = document.querySelector(".range")
-        const rainbow = document.querySelector(".rainbow")
-        const erase = document.querySelector(".erase")
+        const button = document.querySelector(".button");
+        const slider = document.querySelector(".range");
+        const rainbow = document.querySelector(".rainbow");
+        const erase = document.querySelector(".erase");
+        const click = document.querySelector(".click");
+        
         const colorPalette = [
-  "#98EECC",
-  "#D0F5BE",
-  "#FBFFDC",
-  "#A4907C",
-  "#6527BE",
-  "#9681EB",
-  "#45CFDD",
-  "#A7EDE7",
-  "#3AA6B9",
-  "#FFD0D0",
-  "#FF9EAA",
-  "#C1ECE4",
-  "#B9EDDD",
-  "#87CBB9",
-  "#569DAA",
-  "#577D86",
-  "#94B49F",
-  "#CEE5D0",
-  "#FCF8E8",
-  "#ECB390",
-  "#D61355",
-  "#F94A29",
-  "#FCE22A",
-  "#30E3DF"
-];
-
-        const MAINCOLOR = "#000"
+          "#98EECC",
+          "#D0F5BE",
+          "#FBFFDC",
+          "#A4907C",
+          "#6527BE",
+          "#9681EB",
+          "#45CFDD",
+          "#A7EDE7",
+          "#3AA6B9",
+          "#FFD0D0",
+          "#FF9EAA",
+          "#C1ECE4",
+          "#B9EDDD",
+          "#87CBB9",
+          "#569DAA",
+          "#577D86",
+          "#94B49F",
+          "#CEE5D0",
+          "#FCF8E8",
+          "#ECB390",
+          "#D61355",
+          "#F94A29",
+          "#FCE22A",
+          "#30E3DF"
+        ];
+        const MAINCOLOR = "#000";
 
         let gridPadding = 0;
 
-        ask();
-        
-        function ask(){
-            let howMany = parseInt(prompt("Number of squares per side for the new grid:"));
+        createGrid(25);
 
-
-            createGrid(howMany);
+        click.addEventListener("input", function() {
+            const grids = container.querySelectorAll(".grid");
+            grids.forEach(grid => grid.addEventListener("click", paint));
+            grids.forEach(grid => grid.remove())
+        });
+     
+        function ask() {
+            let isOn = true;
+            while (isOn) {
+                let howMany = parseInt(prompt("Number of squares per side for the new grid:"));
+                if (howMany <= 100 && howMany > 0) {
+                    createGrid(howMany);
+                    break;
+                }
+            }              
         }
 
         function createGrid(number) {
+            gridPadding = ((375 / number) / 2) ;
+            gridPadding = gridPadding.toFixed(2) - 1.05;
 
-            gridPadding = ((375 / number) / 2) 
-            gridPadding = gridPadding.toFixed(2) - 1
-
-            for (let j=0; j< number; j++) {
-                for (let i=0; i< number; i++) {
+            for (let j = 0; j < number; j++) {
+                for (let i = 0; i < number; i++) {
                     const grid = document.createElement("div");
-                    grid.className= "grid";
-                    grid.style.border ="0.01px solid white";
-                    grid.style.borderRadius = "4px" 
-                    grid.style.padding =`${gridPadding}px`
+                    grid.className = "grid";
+                    grid.style.border = "0.01px solid white";
+                    grid.style.borderRadius = "4px";
+                    grid.style.padding = `${gridPadding}px`;
                     container.appendChild(grid);  
-                    grid.addEventListener("mouseover",paint)      
+                    grid.addEventListener("click", paint);
+                    grid.addEventListener("mouseover", paint);
                 }
             }
         }
-
 
         function removeGrids() {
             let grids = document.querySelectorAll(".grid");
             grids.forEach(element => {
                 element.remove();  
-            }) 
+            }); 
         }
 
         function paint() {
             this.style.transition = "all 0.6s";
             if (erase.checked) {
-                this.style.backgroundColor = "white"
-
+                this.style.backgroundColor = "white";
             } else if (rainbow.checked) {
                 const randomColor = getRandomColor();
                 this.style.backgroundColor = randomColor;
-
             } else {
-            this.style.backgroundColor = MAINCOLOR
+                this.style.backgroundColor = MAINCOLOR;
             }
         }
 
         function getRandomColor() {
             const randomIndex = Math.floor(Math.random() * colorPalette.length);
             return colorPalette[randomIndex];
-            }
+        }
 
-        button.addEventListener("click",() => {
+        button.addEventListener("click", () => {
             removeGrids();
             ask();
         });
 
-        slider.addEventListener("input",function() {
+        slider.addEventListener("input", function() {
             removeGrids();
             createGrid(this.value);
         });
-
-        
-        
     </script>
 </body>
 </html>

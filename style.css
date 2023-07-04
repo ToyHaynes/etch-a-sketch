@@ -54,7 +54,7 @@ input[type="range"]{
     cursor: pointer;
 }
 
-/*          slider          */
+/*          Toggle         */
 
 .togglePart > div {
     margin: -10px 0 2px;

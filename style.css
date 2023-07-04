@@ -25,12 +25,8 @@ body {
     height: 375px;
     margin: 2rem;
     box-shadow: 5px 5px 15px;
+    border-radius: 5px;
 }   
-
-.container > div:hover {
-    background-color: green;
-}
-
 
 .settings {
     display: flex;

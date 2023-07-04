@@ -15,15 +15,22 @@
                 <label for="range">Number of grids</label>
                 <input type="range" name="range" class="range" max="100" min="0" step="25" value="50" oninput="this.nextElementSibling.value = this.value">
                 <output>50</output>
-             </div>
-                <div class="togglePart">
-                    <div>Rainbow Mode</div>
-                    <label class="switch">
-                        <input type="checkbox">
-                        <span class="slider round"></span>
-                    </label>
-                </div>
-                
+            </div>
+            <div class="togglePart">
+                <div>Rainbow Mode</div>
+                <label class="switch">
+                    <input type="checkbox" class="rainbow" checked>
+                    <span class="slider round"></span>
+                </label>
+            </div>
+            <div class="togglePart">
+                <div>Erase</div>
+                <label class="switch">
+                    <input type="checkbox" class="erase">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+            
              </div>
         </div>
 
@@ -32,7 +39,7 @@
         <div class="rightColumn"></div>
         
     </main>
-    <footer class="footer">Mindown</footer>
+    <footer class="footer">Mindown © 2023</footer>
     
    
           
@@ -41,6 +48,36 @@
         const container = document.querySelector(".container");
         const button = document.querySelector(".button")
         const slider = document.querySelector(".range")
+        const rainbow = document.querySelector(".rainbow")
+        const erase = document.querySelector(".erase")
+        const colorPalette = [
+  "#98EECC",
+  "#D0F5BE",
+  "#FBFFDC",
+  "#A4907C",
+  "#6527BE",
+  "#9681EB",
+  "#45CFDD",
+  "#A7EDE7",
+  "#3AA6B9",
+  "#FFD0D0",
+  "#FF9EAA",
+  "#C1ECE4",
+  "#B9EDDD",
+  "#87CBB9",
+  "#569DAA",
+  "#577D86",
+  "#94B49F",
+  "#CEE5D0",
+  "#FCF8E8",
+  "#ECB390",
+  "#D61355",
+  "#F94A29",
+  "#FCE22A",
+  "#30E3DF"
+];
+
+        const MAINCOLOR = "#000"
 
         let gridPadding = 0;
 
@@ -62,30 +99,53 @@
                 for (let i=0; i< number; i++) {
                     const grid = document.createElement("div");
                     grid.className= "grid";
-                    grid.style.border ="0.1px solid gray"; 
+                    grid.style.border ="0.01px solid white";
+                    grid.style.borderRadius = "4px" 
                     grid.style.padding =`${gridPadding}px`
-                    container.appendChild(grid);          
+                    container.appendChild(grid);  
+                    grid.addEventListener("mouseover",paint)      
                 }
             }
         }
+
 
         function removeGrids() {
             let grids = document.querySelectorAll(".grid");
             grids.forEach(element => {
                 element.remove();  
-            });
-            
+            }) 
         }
+
+        function paint() {
+            this.style.transition = "all 0.6s";
+            if (erase.checked) {
+                this.style.backgroundColor = "white"
+
+            } else if (rainbow.checked) {
+                const randomColor = getRandomColor();
+                this.style.backgroundColor = randomColor;
+
+            } else {
+            this.style.backgroundColor = MAINCOLOR
+            }
+        }
+
+        function getRandomColor() {
+            const randomIndex = Math.floor(Math.random() * colorPalette.length);
+            return colorPalette[randomIndex];
+            }
 
         button.addEventListener("click",() => {
             removeGrids();
             ask();
-        })
+        });
 
         slider.addEventListener("input",function() {
             removeGrids();
             createGrid(this.value);
-        })
+        });
+
+        
         
     </script>
 </body>

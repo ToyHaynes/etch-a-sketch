@@ -53,7 +53,7 @@
         const rainbow = document.querySelector(".rainbow");
         const erase = document.querySelector(".erase");
         const click = document.querySelector(".click");
-        
+   
         const colorPalette = [
           "#98EECC",
           "#D0F5BE",
@@ -83,19 +83,16 @@
         const MAINCOLOR = "#000";
 
         let gridPadding = 0;
+        let isClickPainting = false;
+
 
         createGrid(25);
 
-        click.addEventListener("input", function() {
-            const grids = container.querySelectorAll(".grid");
-            grids.forEach(grid => grid.addEventListener("click", paint));
-            grids.forEach(grid => grid.remove())
-        });
      
         function ask() {
             let isOn = true;
             while (isOn) {
-                let howMany = parseInt(prompt("Number of squares per side for the new grid:"));
+                let howMany = parseInt(prompt("Please enter a number between 1-100: "));
                 if (howMany <= 100 && howMany > 0) {
                     createGrid(howMany);
                     break;
@@ -112,7 +109,7 @@
                     const grid = document.createElement("div");
                     grid.className = "grid";
                     grid.style.border = "0.01px solid white";
-                    grid.style.borderRadius = "4px";
+                    grid.style.borderRadius = "5px";
                     grid.style.padding = `${gridPadding}px`;
                     container.appendChild(grid);  
                     grid.addEventListener("click", paint);
@@ -145,6 +142,52 @@
             return colorPalette[randomIndex];
         }
 
+        function toggleClickPainting() {
+            const grids = container.querySelectorAll(".grid");
+            let isMouseDown = false;
+
+            if (click.checked) {
+                grids.forEach(grid => {
+                grid.removeEventListener("mouseover", paint);
+                grid.addEventListener("mousedown", () => {
+                    isMouseDown = true;
+                });
+                grid.addEventListener("mouseup", () => {
+                    isMouseDown = false;
+                });
+                grid.addEventListener("mouseenter", () => {
+                    if (isMouseDown) {
+                    paint.call(grid);
+                    }
+                });
+                });
+            } else {
+                grids.forEach(grid => {
+                grid.removeEventListener("mousedown", () => {
+                    isMouseDown = true;
+                });
+                grid.removeEventListener("mouseup", () => {
+                    isMouseDown = false;
+                });
+                grid.removeEventListener("mouseenter", () => {
+                    if (isMouseDown) {
+                    paint.call(grid);
+                    }
+                });
+                grid.addEventListener("mouseover", paint);
+                });
+            }
+            }
+
+        function handleMouseDown() {
+            isClickPainting = true;
+        }
+
+        function handleMouseUp() {
+            isClickPainting = false;
+        }
+
+
         button.addEventListener("click", () => {
             removeGrids();
             ask();
@@ -154,6 +197,8 @@
             removeGrids();
             createGrid(this.value);
         });
+
+        click.addEventListener("input", toggleClickPainting);
     </script>
 </body>
 </html>

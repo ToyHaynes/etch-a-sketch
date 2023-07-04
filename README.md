@@ -1,6 +1,5 @@
 # etch-a-sketch
 
-# Etch-a-Sketch
 Etch-a-Sketch is a web-based drawing application that allows you to create colorful drawings by hovering or clicking on a grid of squares. It includes various features such as rainbow mode for random colors, a hover-click switch, a new button for customizing the grid size, and a range feature for adjusting the size of each square. Additionally, there are plans to implement a darker mode that gradually applies lesser transparency to colors until they become black. The user interface (UI) is being improved to enhance the overall user experience.
 
 # Features
